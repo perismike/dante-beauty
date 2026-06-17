@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Admin Dashboard</h1>
+</header>
+
+<section>
+  <h2>All Bookings</h2>
+  <div id="bookings"></div>
+</section>
+
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const container = document.getElementById("bookings");
+
+db.collection("bookings").orderBy("time", "desc")
+  .onSnapshot(snapshot => {
+    container.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      let b = doc.data();
+
+      container.innerHTML += `
+        <div style="background:#ffe3ea;padding:10px;margin:10px;border-radius:8px">
+          <p><b>Name:</b> ${b.name}</p>
+          <p><b>Phone:</b> ${b.phone}</p>
+          <p><b>Service:</b> ${b.service}</p>
+          <p><b>Date:</b> ${b.date}</p>
+          <p><b>Time:</b> ${b.time}</p>
+        </div>
+      `;
+    });
+  });
+</script>
+
+</body>
+</html>
